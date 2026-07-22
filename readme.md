@@ -155,4 +155,4 @@ This project is licensed under the **MIT License**.
 
 ## 👨‍💻 Built With ❤️
 
-**Speak it. Hear it. Understand it.**
+> **Speak it. Hear it. Understand it.**
