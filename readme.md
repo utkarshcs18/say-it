@@ -23,7 +23,7 @@ SpeakSense is a Python-powered command-line application that transforms words in
 $ python main.py
 
 ──────────────────────────────────────
-        🎙️ Welcome to SpeakSense
+        Welcome to say-It
 ──────────────────────────────────────
 
 1. Type a Word
