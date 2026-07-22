@@ -10,7 +10,7 @@ SpeakSense is a Python-powered command-line application that transforms words in
 
 * 🎤 **Voice Recognition** – Speak a word naturally using your microphone.
 * ⌨️ **Text Input** – Prefer typing? Enter any word directly.
-* 🔊 **Text-to-Speech** – Hear the correct pronunciation instantly.
+* 🔊 **Text-to-Speech** – Hear the correct pronunciation of the word.
 * 📚 **Instant Definitions** – Fetch word meanings from a dictionary API.
 * ⚡ **Fast & Lightweight** – Runs entirely from the terminal.
 * 🐍 **Built with Python** – Simple, clean, and easy to extend.
