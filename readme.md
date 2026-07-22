@@ -1,4 +1,4 @@
-# 🎙️ say-It
+# say-It
 
 > **Type it. Say it. Hear it. Learn it.**
 
