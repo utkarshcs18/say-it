@@ -97,7 +97,7 @@ cd say-it
 Install dependencies:
 
 ```bash
-pip install -r requirements.txt
+pip install requests speech_recognition  pyttsx3
 ```
 
 Run the application:
