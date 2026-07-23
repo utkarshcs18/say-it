@@ -24,10 +24,7 @@ def speak(active, menu, voice_menu):
     print(f"say-It: {active}")
     print(menu)
 
-    engine.say(f"{active}")
-    engine.runAndWait()
-
-    engine.say(f"{voice_menu}")
+    engine.say(f"{active}{voice_menu}")
     engine.runAndWait()
     
     return get_choice()
@@ -35,7 +32,7 @@ def speak(active, menu, voice_menu):
 
 def initial(active, menu):
     voice_menu = (
-        "Choose one of the following options. "
+        "   Choose one of the following options. "
         "Option one, Text. "
         "Option two, Speak. "
         "Option three, Exit."
