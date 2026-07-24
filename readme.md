@@ -47,7 +47,7 @@ say-It: The word is eloquent. It means: Fluent or persuasive in speaking or writ
 
 ---
 
-## 🏗️ How It Works
+## How It Works
 
 ```text
                 User
@@ -133,7 +133,7 @@ Everything happens in one simple, elegant terminal application.
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 say-it/
@@ -146,7 +146,7 @@ say-it/
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are always welcome!
 
@@ -158,12 +158,12 @@ Contributions are always welcome!
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the **MIT License**.
 
 ---
 
-## 👨‍💻 Built With ❤️
+## Built With ❤️
 
 > **Speak it. Hear it. Understand it.**
