@@ -150,9 +150,9 @@ def get_choice():
         say("No such option. Please choose 1, 2, or 3.")
 
 
-def show_menu(active, menu):
+def show_menu(active, menu, speak_options=True):
     voice_menu = (
-        " Choose one of the following options. "
+        "   Choose one of the following options. "
         "Option one, Text. "
         "Option two, Speak. "
         "Option three, Exit."
@@ -160,7 +160,11 @@ def show_menu(active, menu):
 
     print(f"say-It: {active}")
     print(menu)
-    say(f"{active}{voice_menu}", print_text=False)
+
+    if speak_options:
+        say(f"{active}{voice_menu}", print_text=False)
+    else:
+        say(active, print_text=False)
 
 
 def main():
@@ -176,7 +180,7 @@ def main():
 
     while True:
         get_choice()
-        show_menu("Returning to menu", menu_text) #last fix -> after returning say, improve gui 
+        show_menu("Returning to menu", menu_text, speak_options=False)
 
 
 if __name__ == "__main__":
