@@ -3,15 +3,21 @@ import requests
 import speech_recognition as sr
 import pyttsx3
 
+from rich.console import Console
+from rich.panel import Panel
+from rich.text import Text
+from rich import box
+
 DICTIONARY_API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/{}"
 
 recognizer = sr.Recognizer()
 mic = sr.Microphone()
+console = Console()
 
 
 def say(text, print_text=True):
     if print_text:
-        print(f"say-It: {text}")
+        console.print(f"[bold bright_cyan]say-It:[/bold bright_cyan] {text}")
 
     engine = pyttsx3.init()
     engine.setProperty("rate", 150)
@@ -23,7 +29,8 @@ def say(text, print_text=True):
 def lookup_word(word):
 
     try:
-        response = requests.get(DICTIONARY_API_URL.format(word), timeout=5)
+        with console.status(f"[yellow]Looking up '{word}'...[/yellow]", spinner="dots"):
+            response = requests.get(DICTIONARY_API_URL.format(word), timeout=5)
 
         if response.status_code == 404:
             return None
@@ -69,7 +76,19 @@ def speak_word_result(word, result):
     if example:
         message += f" For example: {example}."
 
-    say(message)
+    console.print(
+        Panel(
+            f"[bold white]{word}[/bold white]\n\n"
+            f"[green]Meaning:[/green] {definition}"
+            + (f"\n[magenta]Example:[/magenta] {example}" if example else ""),
+            title="[bold]Dictionary Result[/bold]",
+            border_style="green",
+            box=box.ROUNDED,
+            expand=False,
+        )
+    )
+
+    say(message, print_text=False)
 
 
 def process_text(text):
@@ -96,7 +115,7 @@ def process_text(text):
 
 def textfn():
     say("Please enter your text.")
-    text = input("saY-It > ")
+    text = console.input("[bold green]saY-It > [/bold green]")
 
     if not text.strip():
         say("Invalid input! You entered nothing.")
@@ -111,9 +130,12 @@ def speakfn():
     try:
         with mic as source:
             recognizer.adjust_for_ambient_noise(source, duration=0.5)
-            audio = recognizer.listen(source, timeout=5, phrase_time_limit=10)
+            with console.status("[yellow]Listening...[/yellow]", spinner="point"):
+                audio = recognizer.listen(source, timeout=5, phrase_time_limit=10)
 
-        recognized_text = recognizer.recognize_google(audio)
+        with console.status("[yellow]Recognizing speech...[/yellow]", spinner="dots"):
+            recognized_text = recognizer.recognize_google(audio)
+
         process_text(recognized_text)
 
     except sr.WaitTimeoutError:
@@ -130,7 +152,7 @@ def exitfn():
 
 
 def get_choice():
-    raw_choice = input("saY-It > ")
+    raw_choice = console.input("[bold green]saY-It > [/bold green]")
 
     try:
         choice = int(raw_choice)
@@ -156,8 +178,17 @@ def show_menu(active, menu, speak_options=True):
         "Option three, Exit."
     )
 
-    print(f"say-It: {active}")
-    print(menu)
+    console.print()
+    console.print(
+        Panel(
+            menu.strip(),
+            title=f"[bold bright_cyan]say-It[/bold bright_cyan] — {active}",
+            border_style="bright_cyan",
+            box=box.ROUNDED,
+            expand=False,
+            padding=(1, 3),
+        )
+    )
 
     if speak_options:
         say(f"{active}{voice_menu}", print_text=False)
@@ -166,9 +197,20 @@ def show_menu(active, menu, speak_options=True):
 
 
 def main():
+    console.print(
+        Panel.fit(
+            Text.from_markup(
+                "[bold magenta]say-It[/bold magenta]\n"
+                "[dim]Your voice & text dictionary assistant[/dim]",
+                justify="center",
+            ),
+            border_style="magenta",
+            box=box.DOUBLE,
+        )
+    )
+
     active_message = "Initializing say-It"
     menu_text = (
-        "\nChoose any one among these:\n"
         "1. TEXT\n"
         "2. SPEAK\n"
         "3. EXIT"
