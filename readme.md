@@ -22,21 +22,22 @@ say-It is a Python-powered command-line application that transforms words into a
 ```text
 $ python main.py
 
-╔══════════════════════════════════════╗
-║                say-It                ║
+╔══════════════════════════════════════════╗
+║                say-It                    ║
 ║  Your voice & text dictionary assistant  ║
-╚══════════════════════════════════════╝
+╚══════════════════════════════════════════╝
 
 ╭── say-It — Initializing say-It ──╮
 │ 1. TEXT                          │
 │ 2. SPEAK                         │
 │ 3. EXIT                          │
 ╰──────────────────────────────────╯
+
 saY-It > 1
 say-It: Please enter your text.
 saY-It > eloquent
 Looking up 'eloquent'...
-say-It: The word is eloquent. It means: Fluent or persuasive in speaking or writing.
+
 ╭─ Dictionary Result ──────────────╮
 │ eloquent                         │
 │                                  │
