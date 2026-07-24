@@ -9,8 +9,10 @@ recognizer = sr.Recognizer()
 mic = sr.Microphone()
 
 
-def say(text):
-    print(text)
+def say(text, print_text=True):
+    if print_text:
+        print(f"say-It: {text}")
+
     engine = pyttsx3.init()
     engine.setProperty("rate", 150)
     engine.say(text)
@@ -39,12 +41,11 @@ def lookup_word(word):
                     break
 
         meaning = entry["meanings"][0]
-        part_of_speech = meaning.get("partOfSpeech", "")
         definition_entry = meaning["definitions"][0]
         definition = definition_entry.get("definition", "")
         example = definition_entry.get("example", "")
 
-        return phonetic, part_of_speech, definition, example
+        return phonetic, definition, example
 
     except requests.exceptions.RequestException:
         return "network_error"
@@ -61,11 +62,9 @@ def speak_word_result(word, result):
         say(f"Sorry, I could not find a definition for {word}.")
         return
 
-    phonetic, part_of_speech, definition, example = result
+    phonetic, definition, example = result
 
     message = f"The word is {word}."
-    if part_of_speech:
-        message += f" It is a {part_of_speech}."
     message += f" It means: {definition}."
     if example:
         message += f" For example: {example}."
@@ -96,7 +95,8 @@ def process_text(text):
 
 
 def textfn():
-    text = input("Enter your Text: ")
+    say("Please enter your text.")
+    text = input("saY-It > ")
 
     if not text.strip():
         say("Invalid input! You entered nothing.")
@@ -138,7 +138,7 @@ def get_choice():
         say("Invalid input! Please enter a number: 1, 2, or 3.")
         return
 
-    say(f"You have chosen option {choice}")
+    say(f"You entered option {choice}")
 
     if choice == 1:
         textfn()
@@ -152,15 +152,15 @@ def get_choice():
 
 def show_menu(active, menu):
     voice_menu = (
-        "   Choose one of the following options. "
+        " Choose one of the following options. "
         "Option one, Text. "
         "Option two, Speak. "
         "Option three, Exit."
     )
 
-    print(f"\nsay-It: {active}")
+    print(f"say-It: {active}")
     print(menu)
-    say(f"{active}{voice_menu}")
+    say(f"{active}{voice_menu}", print_text=False)
 
 
 def main():
@@ -176,7 +176,7 @@ def main():
 
     while True:
         get_choice()
-        show_menu("Returning to menu", menu_text)
+        show_menu("Returning to menu", menu_text) #last fix -> after returning say, improve gui 
 
 
 if __name__ == "__main__":
