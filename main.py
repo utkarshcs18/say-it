@@ -21,7 +21,7 @@ def get_choice():
 
 
 def speak(active, menu, voice_menu):
-    print(f"say-It: {active}")
+    print(f"\nsay-It: {active}")
     print(menu)
 
     engine.say(f"{active}{voice_menu}")
