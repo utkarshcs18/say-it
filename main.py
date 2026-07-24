@@ -138,8 +138,6 @@ def get_choice():
         say("Invalid input! Please enter a number: 1, 2, or 3.")
         return
 
-    say(f"You entered option {choice}")
-
     if choice == 1:
         textfn()
     elif choice == 2:
