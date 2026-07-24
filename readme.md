@@ -2,43 +2,47 @@
 
 > **Type it. Say it. Hear it. Learn it.**
 
-SpeakSense is a Python-powered command-line application that transforms words into an interactive learning experience. Whether you type a word or speak it through your microphone, SpeakSense instantly recognizes it, pronounces it aloud, and displays its meaning—all from your terminal.
+say-It is a Python-powered command-line application that transforms words into an interactive learning experience. Whether you type a word or speak it through your microphone, say-It instantly recognizes it, pronounces it aloud, and displays its meaning—all from your terminal.
 
 ---
 
-## 🚀 Features
+## Features
 
-* 🎤 **Voice Recognition** – Speak a word naturally using your microphone.
-* ⌨️ **Text Input** – Prefer typing? Enter any word directly.
-* 🔊 **Text-to-Speech** – Hear the correct pronunciation of the word.
-* 📚 **Instant Definitions** – Fetch word meanings from a dictionary API.
-* ⚡ **Fast & Lightweight** – Runs entirely from the terminal.
-* 🐍 **Built with Python** – Simple, clean, and easy to extend.
+* **Voice Recognition** – Speak a word naturally using your microphone.
+* **Text Input** – Prefer typing? Enter any word or sentence directly.
+* **Text-to-Speech** – Hear the correct pronunciation of the word.
+* **Instant Definitions** – Fetch word meanings and examples from a dictionary API.
+* **Beautiful UI** – Features a clean and colorful terminal interface using Rich.
+* **Fast & Lightweight** – Runs entirely from the terminal.
 
 ---
 
-## 🖥️ Demo
+## Demo
 
 ```text
 $ python main.py
 
-──────────────────────────────────────
-        Welcome to say-It
-──────────────────────────────────────
+╔══════════════════════════════════════╗
+║                say-It                ║
+║  Your voice & text dictionary assistant  ║
+╚══════════════════════════════════════╝
 
-1. Type a Word
-2. Speak a Word
-
-> 2
-
-🎤 Listening...
-
-✅ You said: eloquent
-
-🔊 Pronouncing...
-
-📖 Meaning:
-Fluent or persuasive in speaking or writing.
+╭── say-It — Initializing say-It ──╮
+│ 1. TEXT                          │
+│ 2. SPEAK                         │
+│ 3. EXIT                          │
+╰──────────────────────────────────╯
+saY-It > 1
+say-It: Please enter your text.
+saY-It > eloquent
+Looking up 'eloquent'...
+say-It: The word is eloquent. It means: Fluent or persuasive in speaking or writing.
+╭─ Dictionary Result ──────────────╮
+│ eloquent                         │
+│                                  │
+│ Meaning: Fluent or persuasive in │
+│ speaking or writing.             │
+╰──────────────────────────────────╯
 ```
 
 ---
@@ -54,7 +58,7 @@ Fluent or persuasive in speaking or writing.
         │                   │
         └─────────┬─────────┘
                   │
-         Recognized Word
+          Recognized Word
                   │
       ┌───────────┴───────────┐
       │                       │
@@ -62,42 +66,48 @@ Fluent or persuasive in speaking or writing.
       │                       │
       └───────────┬───────────┘
                   │
-      Hear the Word + Learn the Meaning
+       Hear the Word + Learn Meaning
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-| Technology           | Purpose                    |
-| -------------------- | -------------------------- |
-| 🐍 Python            | Core application           |
-| 🎤 SpeechRecognition | Converts speech to text    |
-| 🎙️ PyAudio           | Captures microphone input  |
-| 🔊 pyttsx3           | Offline text-to-speech     |
-| 🌐 Requests          | API communication          |
-| 📖 Dictionary API    | Retrieves word definitions |
+| Technology           | Purpose                             |
+| -------------------- | ----------------------------------- |
+|    Python            | Core application logic              |
+|    SpeechRecognition | Converts speech to text             |
+|    PyAudio           | Captures microphone input           |
+|    pyttsx3           | Offline text-to-speech              |
+|    Rich              | Beautiful terminal UI formatting    |
+|    Requests          | API communication                   |
+|    Dictionary API    | Retrieves word definitions/examples |
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 Clone the repository:
 
 ```bash
 git clone https://github.com/utkarshcs18/say-it.git
+cd say-it
 ```
 
-Move into the project directory:
+It is recommended to use a virtual environment:
 
 ```bash
-cd say-it
+python -m venv venv
+# On Windows
+venv\Scripts\activate
+# On macOS/Linux
+source venv/bin/activate
 ```
 
 Install dependencies:
 
 ```bash
-pip install requests speech_recognition  pyttsx3
+pip install requests SpeechRecognition pyttsx3 rich pyaudio
 ```
 
 Run the application:
@@ -108,18 +118,18 @@ python main.py
 
 ---
 
-## 💡 Why SpeakSense?
+## Why say-It?
 
 Learning a new word shouldn't require opening multiple websites or apps.
 
-With SpeakSense, you can:
+With say-It, you can:
 
 * ✔️ Hear how a word is pronounced.
-* ✔️ Learn its meaning instantly.
+* ✔️ Learn its meaning and usage instantly.
 * ✔️ Practice speaking it correctly.
 * ✔️ Build your vocabulary effortlessly.
 
-Everything happens in one simple terminal application.
+Everything happens in one simple, elegant terminal application.
 
 ---
 
@@ -128,9 +138,10 @@ Everything happens in one simple terminal application.
 ```text
 say-it/
 │
-├── main.py
-├── README.md
-└── assets/
+├── main.py       # Core application script
+├── README.md     # Documentation
+├── .gitignore    # Git ignore rules
+└── venv/         # Virtual environment
 ```
 
 ---
