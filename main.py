@@ -7,6 +7,10 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 from rich import box
+from random_word import RandomWords
+r = RandomWords()
+
+r.get_random_word()
 
 DICTIONARY_API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/{}"
 
@@ -157,7 +161,7 @@ def get_choice():
     try:
         choice = int(raw_choice)
     except ValueError:
-        say("Invalid input! Please enter a number: 1, 2, or 3.")
+        say("Invalid input! Please enter a number: 1, 2, 3 or 4.")
         return
 
     if choice == 1:
@@ -165,6 +169,8 @@ def get_choice():
     elif choice == 2:
         speakfn()
     elif choice == 3:
+        vocabfn()
+    elif choice == 4:
         exitfn()
     else:
         say("No such option. Please choose 1, 2, or 3.")
@@ -175,7 +181,8 @@ def show_menu(active, menu, speak_options=True):
         "   Choose one of the following options. "
         "Option one, Text. "
         "Option two, Speak. "
-        "Option three, Exit."
+        "Option three, Vocab. "
+        "Option four, Exit."
     )
 
     console.print()
@@ -213,7 +220,8 @@ def main():
     menu_text = (
         "1. TEXT\n"
         "2. SPEAK\n"
-        "3. EXIT"
+        "3. VOCAB\n"
+        "4. EXIT"
     )
 
     show_menu(active_message, menu_text)
