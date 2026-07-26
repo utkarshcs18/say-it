@@ -118,7 +118,6 @@ def process_text(text):
             result = lookup_word(clean_word)
             speak_word_result(clean_word, result)
 
-
 def textfn():
     say("Please enter your text.")
     text = console.input("[bold green]saY-It > [/bold green]")
