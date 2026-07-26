@@ -1,18 +1,22 @@
 import sys
+import os
+import json
+from datetime import date
 import requests
 import speech_recognition as sr
 import pyttsx3
+from dotenv import load_dotenv
+
+load_dotenv() 
 
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 from rich import box
-from random_word import RandomWords
-r = RandomWords()
-
-r.get_random_word()
 
 DICTIONARY_API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/{}"
+WORDNIK_API_KEY = os.environ.get("WORDNIK_API_KEY", "")
+WORDNIK_BASE_URL = "https://api.wordnik.com/v4"
 
 recognizer = sr.Recognizer()
 mic = sr.Microphone()
@@ -31,7 +35,6 @@ def say(text, print_text=True):
 
 
 def lookup_word(word):
-
     try:
         with console.status(f"[yellow]Looking up '{word}'...[/yellow]", spinner="dots"):
             response = requests.get(DICTIONARY_API_URL.format(word), timeout=5)
@@ -150,6 +153,149 @@ def speakfn():
         say("Sorry, the speech recognition service is unavailable right now.")
 
 
+VOCAB_CACHE_FILE = os.path.join(os.path.expanduser("~"), ".say_it_vocab_cache.json")
+
+
+def wordnik_get(path, params=None):
+    if not WORDNIK_API_KEY:
+        return "no_api_key"
+
+    params = dict(params or {})
+    params["api_key"] = WORDNIK_API_KEY
+
+    try:
+        response = requests.get(f"{WORDNIK_BASE_URL}{path}", params=params, timeout=5)
+
+        if response.status_code == 404:
+            return None
+
+        response.raise_for_status()
+        return response.json()
+
+    except requests.exceptions.RequestException:
+        return "network_error"
+
+
+def lookup_word_wordnik(word):
+    definitions = wordnik_get(
+        f"/word.json/{word}/definitions",
+        {"limit": 1, "sourceDictionaries": "all"},
+    )
+
+    if definitions in ("network_error", "no_api_key"):
+        return definitions
+    if not definitions:
+        return None
+
+    definition = definitions[0].get("text", "")
+    if not definition:
+        return None
+
+    example = ""
+    examples_data = wordnik_get(f"/word.json/{word}/examples", {"limit": 1})
+    if isinstance(examples_data, dict):
+        example_list = examples_data.get("examples", [])
+        if example_list:
+            example = example_list[0].get("text", "")
+
+    phonetic = ""
+    pronunciations = wordnik_get(f"/word.json/{word}/pronunciations", {"limit": 1})
+    if isinstance(pronunciations, list) and pronunciations:
+        phonetic = pronunciations[0].get("raw", "")
+
+    return phonetic, definition, example
+
+
+def fetch_random_defined_words(n):
+    data = wordnik_get(
+        "/words.json/randomWords",
+        {
+            "hasDictionaryDef": "true",
+            "minCorpusCount": 1000,
+            "minLength": 4,
+            "excludePartOfSpeech": "proper-noun,proper-noun-plural",
+            "limit": n,
+        },
+    )
+
+    if not isinstance(data, list):
+        return []
+
+    words = []
+    for entry in data:
+        candidate = entry.get("word", "").strip().lower()
+        if candidate and candidate.isalpha() and candidate not in words:
+            words.append(candidate)
+
+    return words
+
+
+def get_daily_words(n=5):
+    today = date.today().isoformat()
+
+    if os.path.exists(VOCAB_CACHE_FILE):
+        try:
+            with open(VOCAB_CACHE_FILE, "r") as f:
+                cached = json.load(f)
+            if cached.get("date") == today and len(cached.get("entries", [])) == n:
+                return [tuple(entry) for entry in cached["entries"]]
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    entries = []
+    seen = set()
+    attempts = 0
+    batch_size = max(n * 2, 10)
+
+    while len(entries) < n and attempts < 5:
+        attempts += 1
+        candidates = fetch_random_defined_words(batch_size)
+
+        if not candidates:
+            break
+
+        for candidate in candidates:
+            if len(entries) >= n or candidate in seen:
+                continue
+            seen.add(candidate)
+
+            result = lookup_word_wordnik(candidate)
+            if result in (None, "network_error", "no_api_key"):
+                continue
+
+            entries.append((candidate, result))
+
+    if entries:
+        try:
+            with open(VOCAB_CACHE_FILE, "w") as f:
+                json.dump({"date": today, "entries": entries}, f)
+        except OSError:
+            pass
+
+    return entries
+
+
+def vocabfn():
+    if not WORDNIK_API_KEY:
+        say(
+            "The vocab feature needs a free Wordnik API key. Get one at "
+            "developer.wordnik.com and set it as the WORDNIK_API_KEY "
+            "environment variable, then try again."
+        )
+        return
+
+    say("Here are your 5 new vocabulary words for today.")
+
+    entries = get_daily_words(5)
+
+    if not entries:
+        say("Sorry, I could not generate today's vocabulary words. Please check your internet connection and try again.")
+        return
+
+    for word, result in entries:
+        speak_word_result(word, result)
+
+
 def exitfn():
     say("Goodbye! Closing say-It now.")
     sys.exit(0)
@@ -173,7 +319,7 @@ def get_choice():
     elif choice == 4:
         exitfn()
     else:
-        say("No such option. Please choose 1, 2, or 3.")
+        say("No such option. Please choose 1, 2, 3 or 4.")
 
 
 def show_menu(active, menu, speak_options=True):
