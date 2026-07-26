@@ -1,17 +1,22 @@
-# Virtual Environment
-venv/
+# Environments
+.env
 .venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # Python cache
 __pycache__/
 *.py[cod]
 *$py.class
-
-# VS Code
-.vscode/
-
-# Environment variables
-.env
 
 # OS files
 .DS_Store
@@ -27,3 +32,8 @@ dist/
 
 # PyInstaller
 *.spec
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
