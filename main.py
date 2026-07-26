@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv() 
+
 import sys
 import os
 import json
@@ -5,10 +8,6 @@ from datetime import date
 import requests
 import speech_recognition as sr
 import pyttsx3
-from dotenv import load_dotenv
-
-load_dotenv() 
-
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
