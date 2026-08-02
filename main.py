@@ -346,7 +346,6 @@ def show_menu(active, menu, speak_options=True):
     else:
         say(active, print_text=False)
 
-
 def main():
     console.print(
         Panel.fit(
